@@ -16,9 +16,11 @@ const scopes = [
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleLogin() {
     setIsLoading(true);
+    setError(null);
     
     try {
       // Generate and store PKCE code verifier
@@ -53,6 +55,7 @@ export default function Login() {
       window.location.href = authUrl.toString();
     } catch (error) {
       console.error('Login error:', error);
+      setError('Failed to initialize login. Please try again.');
       setIsLoading(false);
     }
   }
@@ -61,6 +64,9 @@ export default function Login() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#493D9E]">
       <div className="p-8 rounded-lg bg-black bg-opacity-20 text-center">
         <h1 className="text-4xl font-bold text-white mb-8">Mujik Player</h1>
+        {error && (
+          <p className="text-red-500 mb-4">{error}</p>
+        )}
         <button
           onClick={handleLogin}
           disabled={isLoading}
